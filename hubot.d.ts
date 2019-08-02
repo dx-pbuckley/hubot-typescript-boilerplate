@@ -134,8 +134,8 @@ declare module 'hubot' {
     auth: (user: string, pass: string) => ScopedClient;
     header: (name: string, value: string) => ScopedClient;
     headers: (h: object) => ScopedClient;
-    get: () => ((callback: (err: Error, res: ServerResponse, body: string) => void) => void);
-    post: (data?: any) => ((callback: (err: Error, res: ServerResponse, body: string) => void) => void);
+    get: () => ((callback: (err: Error | null, res: ServerResponse | null, body: string | null) => void) => void);
+    post: (data?: any) => ((callback: (err: Error | null, res: ServerResponse | null, body: string | null) => void) => void);
   }
 
   interface Robot<A> extends EventEmitter {
