@@ -8,6 +8,7 @@ import { Application } from 'express'
 import { WebClient, ChatPostMessageArguments } from '@slack/client'
 import { EventEmitter } from 'events'
 import { SlackAdapter } from 'hubot-slack'
+import { ServerResponse } from "http"
 
 declare module 'hubot' {
   interface Logger {
@@ -19,6 +20,7 @@ declare module 'hubot' {
     warning: (...args: any[]) => void
     notice: (...args: any[]) => void
     info: (...args: any[]) => void
+    debug: (...args: any[]) => void
   }
 
   interface Message {
@@ -26,11 +28,13 @@ declare module 'hubot' {
     /**
      * ID on Slack for this channel/room
      */
-    room: string
+    room: string;
     mentions: string[]
     thread_ts: string | null
     reply_broadcast: boolean
     rawText: string
+    rawMessage: any
+    match: (regex: RegExp) => RegExpMatchArray
   }
 
   interface SlackUserApi {
@@ -120,6 +124,20 @@ declare module 'hubot' {
     reply(message: SlackMessage | string): void
   }
 
+  interface ScopedClient {
+    query: (key: string, value: string) => ScopedClient;
+    host: (h: string) => ScopedClient;
+    port: (p: string) => ScopedClient;
+    protocol: (p: string) => ScopedClient;
+    encoding: (e: string) => ScopedClient;
+    timeout: (time: number) => ScopedClient;
+    auth: (user: string, pass: string) => ScopedClient;
+    header: (name: string, value: string) => ScopedClient;
+    headers: (h: object) => ScopedClient;
+    get: () => ((callback: (err: Error, res: ServerResponse, body: string) => void) => void);
+    post: (data?: any) => ((callback: (err: Error, res: ServerResponse, body: string) => void) => void);
+  }
+
   interface Robot<A> extends EventEmitter {
     // added by us
     slackClient: WebClient
@@ -128,8 +146,8 @@ declare module 'hubot' {
     events: EventEmitter
     router: Application
     logger: Logger
+    http: (url: string) => ScopedClient
     error(cb: (error: Error, res?: Response<SlackAdapter>) => void): void
-
     enter(cb: (res: Response<A>) => void): void
     leave(cb: (res: Response<A>) => void): void
 
