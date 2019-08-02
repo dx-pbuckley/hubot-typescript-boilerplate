@@ -1,6 +1,6 @@
 {
   "name": "hubot-types",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "pbuckleyofnpm",
   "license": "MIT",
   "repository": {
@@ -19,9 +19,6 @@
     "tslint-config-airbnb": "^5.11.0",
     "typescript": "^3.1.6"
   },
-  "files": [
-    "types"
-  ],
   "scripts": {
   
   }
